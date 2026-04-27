@@ -1,6 +1,6 @@
 # 🎬 Video Platform — РГЗ по Интернет-технологиям
 
-> Тестовая видеоплатформа: Python (Django REST) бэкенд + React JS фронтенд
+> Видеоплатформа: Python (Django REST) бэкенд + React JS фронтенд
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-4.2-green)](https://djangoproject.com)
@@ -111,7 +111,3 @@ python manage.py test
 cd frontend
 npm test
 ```
-
-## 👤 Автор
-
-Nikita — [@XlebDaMaslo](https://github.com/XlebDaMaslo)

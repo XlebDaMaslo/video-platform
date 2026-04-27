@@ -1,0 +1,70 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: videoplatform
+      POSTGRES_USER: videouser
+      POSTGRES_PASSWORD: videopassword
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U videouser -d videoplatform"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: >-
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+      - media_data:/app/media
+    ports:
+      - '8000:8000'
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+
+  # ─── HLS Streaming (nginx-rtmp) ───────────────────────────────────────────
+  nginx-rtmp:
+    image: tiangolo/nginx-rtmp
+    restart: unless-stopped
+    ports:
+      - '1935:1935'   # RTMP вход (OBS / FFmpeg)
+      - '8080:80'     # HLS выход (браузер)
+    volumes:
+      - ./nginx-rtmp/nginx.conf:/etc/nginx/nginx.conf:ro
+      - hls_data:/tmp/hls
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  media_data:
+  hls_data:

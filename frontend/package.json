@@ -1,0 +1,29 @@
+{
+  "name": "video-platform-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "axios": "^1.6.8",
+    "react-player": "^2.15.1",
+    "react-hook-form": "^7.51.1",
+    "@tanstack/react-query": "^5.28.9",
+    "jwt-decode": "^4.0.0",
+    "hls.js": "^1.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.2.6",
+    "@testing-library/react": "^15.0.2",
+    "@testing-library/jest-dom": "^6.4.2",
+    "vitest": "^1.4.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  }
+}
